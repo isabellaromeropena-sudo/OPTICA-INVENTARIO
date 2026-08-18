@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Óptica · Inventario</title>
+<style>
+:root{
+  --gold:#c49a42; --gold2:#e3c27d; --cream:#f8f5ee; --ink:#292722;
+  --muted:#7d766b; --line:#e8e1d5; --white:#fff; --green:#2c9b78;
+  --red:#e85d62; --yellow:#eabf3f; --shadow:0 18px 45px rgba(63,48,25,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#fbfaf7,#f4f0e7);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:28px 4.5%;display:flex;align-items:center;gap:18px}
+.logo{width:58px;height:58px;border-radius:20px;background:linear-gradient(145deg,#d8b86c,#b98b34);display:grid;place-items:center;color:#fff;font-size:27px;box-shadow:0 9px 24px rgba(184,139,52,.25)}
+h1{margin:0;font-size:30px;letter-spacing:-.7px}.subtitle{margin-top:5px;color:var(--muted)}
+main{max-width:1700px;margin:auto;padding:32px 4% 55px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:26px}
+.card{background:#fff;border:1px solid var(--line);border-radius:25px;padding:27px 25px;box-shadow:var(--shadow)}
+.card small{display:block;color:#9b9183;text-transform:uppercase;letter-spacing:1.2px;font-size:13px}.card strong{display:block;font-size:31px;margin-top:10px}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);margin-bottom:22px;flex-wrap:wrap}
+.search{flex:1;min-width:260px;position:relative}.search input{width:100%;height:56px;border:1px solid var(--gold);border-radius:15px;padding:0 18px 0 48px;font-size:16px;outline:none;background:#fff}
+.search span{position:absolute;left:18px;top:16px;font-size:21px}
+select,.btn{height:56px;border-radius:15px;border:1px solid var(--line);padding:0 16px;background:#fff;font-size:15px;color:var(--ink)}
+.btn{font-weight:700;cursor:pointer}.primary{background:var(--gold);border-color:var(--gold);color:#fff}.secondary{background:#f1eee8}
+.legend{display:flex;gap:22px;color:#7f776d;font-size:14px;margin:10px 0 20px}.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px}.red{background:#efadb0}.yellow{background:#f3d783}.green{background:#a8dccb}
+.tablewrap{background:#fff;border:1px solid var(--line);border-radius:25px;overflow:auto;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:1050px}th{text-align:left;padding:17px 18px;color:#766f65;font-size:12px;text-transform:uppercase;letter-spacing:.7px;background:#fbfaf7;border-bottom:1px solid var(--line)}
+td{padding:16px 18px;border-bottom:1px solid #eee8de;font-size:14px}tbody tr:last-child td{border-bottom:0}
+tbody tr.row-red{background:#fff2f2}tbody tr.row-yellow{background:#fff9e7}tbody tr:hover{filter:brightness(.985)}
+.ref{font-weight:800;color:#8d6823}.money{font-variant-numeric:tabular-nums}.tag{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}.tag.disponible{background:#e7f6f0;color:#23785e}.tag.comprado{background:#fff0c8;color:#87620d}.tag.vendido{background:#eeeae4;color:#686158}
+.actions{display:flex;gap:7px}.mini{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 11px;font-weight:700;cursor:pointer}.mini.primary{color:#fff;background:var(--gold);border-color:var(--gold)}.mini.danger{color:#b83b42}
+.empty{text-align:center;padding:45px;color:#8c8378}.footer{text-align:center;color:#968d81;font-size:13px;margin-top:18px}
+.modal{position:fixed;inset:0;background:rgba(36,30,21,.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.open{display:flex}
+.dialog{width:min(680px,100%);background:#fff;border-radius:26px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.2)}
+.dialog h2{margin:0 0 20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:12px;color:#766f65;margin:0 0 6px}.field input,.field select{width:100%;height:48px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:15px}.full{grid-column:1/-1}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+.toast{position:fixed;right:22px;bottom:22px;background:#292722;color:#fff;padding:13px 17px;border-radius:13px;display:none;z-index:20}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.cards{grid-template-columns:1fr 1fr}.card{padding:20px 15px}.card strong{font-size:25px}header{padding:22px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">◉</div>
+  <div><h1>Óptica · Inventario</h1><div class="subtitle">Control de monturas, costos, precios de venta y unidades vendidas</div></div>
+</header>
+<main>
+  <section class="cards">
+    <div class="card"><small>Referencias</small><strong id="sRefs">0</strong></div>
+    <div class="card"><small>Unidades disponibles</small><strong id="sUnits">0</strong></div>
+    <div class="card"><small>Compradas</small><strong id="sBought">0</strong></div>
+    <div class="card"><small>Unidades vendidas</small><strong id="sSold">0</strong></div>
+  </section>
+
+  <section class="toolbar">
+    <div class="search"><span>🔎</span><input id="search" placeholder="Buscar por referencia o montura..." oninput="render()"></div>
+    <select id="filter" onchange="render()">
+      <option value="todos">Todos los estados</option><option value="disponible">Disponible</option><option value="comprado">Comprado</option><option value="vendido">Vendido</option>
+    </select>
+    <select id="group" onchange="render()">
+      <option value="todos">Todos los proveedores</option><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option>
+    </select>
+    <button class="btn primary" onclick="openModal()">＋ Agregar montura</button>
+    <button class="btn secondary" onclick="exportBackup()">Exportar respaldo</button>
+    <label class="btn secondary" style="display:flex;align-items:center;cursor:pointer">Importar
+      <input type="file" accept=".json" onchange="importBackup(event)" style="display:none">
+    </label>
+  </section>
+
+  <div class="legend">
+    <span><i class="dot red"></i>Comprado (rojo)</span>
+    <span><i class="dot yellow"></i>Comprado (amarillo)</span>
+    <span><i class="dot green"></i>Disponible</span>
+  </div>
+
+  <section class="tablewrap">
+    <table>
+      <thead><tr><th>Referencia</th><th>Montura</th><th>Proveedor</th><th>Cant.</th><th>Costo</th><th>Costo total</th><th>Precio venta</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="empty" class="empty" style="display:none">No encontramos monturas con esa búsqueda.</div>
+  </section>
+  <div class="footer">Los cambios se guardan automáticamente en este navegador · Inventario inicial cargado desde la hoja “ÓPTICA”.</div>
+</main>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+ <div class="dialog">
+  <h2 id="modalTitle">Agregar montura</h2>
+  <div class="grid">
+   <div class="field"><label>Referencia</label><input id="fRef"></div>
+   <div class="field"><label>Montura</label><input id="fMontura"></div>
+   <div class="field"><label>Cantidad</label><input id="fCantidad" type="number" min="1" value="1"></div>
+   <div class="field"><label>Costo unitario</label><input id="fCosto" type="number" min="0"></div>
+   <div class="field"><label>Costo total</label><input id="fTotal" type="number" min="0"></div>
+   <div class="field"><label>Precio de venta</label><input id="fVenta" type="number" min="0"></div>
+   <div class="field full"><label>Proveedor</label><select id="fGroup"><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option></select></div>
+  </div>
+  <div class="modal-actions"><button class="btn secondary" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="saveItem()">Guardar montura</button></div>
+ </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const initial = [{"ref": "ZR8510", "montura": "ZR METAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 25000.0, "total": 25000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "ETG9613", "montura": "Ethereal Eye", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "SK1012", "montura": "SWAROVSKI", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6545", "montura": "NYLON", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 36000.0, "total": 36000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "IMP029", "montura": "IMPERIO", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 32000.0, "total": 64000.0, "venta": 114240.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "HER0151", "montura": "CAROLINA HERRERA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "BC68115", "montura": "FIORALBA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 38000.0, "total": 38000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "IMP025", "montura": "IMPERIO", "cantidad": 3, "originalCantidad": 3, "vendidas": 0, "costo": 35000.0, "total": 105000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "HER0152", "montura": "CAROLINA HERRERA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8516", "montura": "ZR METAL", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 25000.0, "total": 50000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "95716", "montura": "LOVELIGHT", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": 107100.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "CT0486O", "montura": "CARTIER", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "ZT8909", "montura": "FIORALBA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 26000.0, "total": 26000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "M005", "montura": "MIU MIU", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 50000.0, "total": 50000.0, "venta": 178500.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "MU66Z", "montura": "MIU MIU", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "93530", "montura": "M.S.93530", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 34000.0, "total": 34000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "AZ4568", "montura": "LE COMMERCE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 34000.0, "total": 34000.0, "venta": 121380.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "rojo"}, {"ref": "TH1286", "montura": "TOMMY HILFIGER", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 55000.0, "total": 110000.0, "venta": 196350.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6218", "montura": "ZR METAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 28000.0, "total": 28000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "SVN046", "montura": "SEVEN'S MEN", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "K502-07", "montura": "UNDER ARMOUR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 55000.0, "total": 55000.0, "venta": 196350.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZB1859", "montura": "ZB METAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 28000.0, "total": 28000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "81571", "montura": "M. DAMA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 34000.0, "total": 34000.0, "venta": 121380.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "rojo"}, {"ref": "OX8156-1155", "montura": "OAKLEY", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 55000.0, "total": 55000.0, "venta": 196350.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "ZR8529", "montura": "ZR METAL", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 34000.0, "total": 68000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "81571", "montura": "LE COMMERCE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "rojo"}, {"ref": "OX8096-0354", "montura": "OAKLEY", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 55000.0, "total": 55000.0, "venta": 196350.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8554", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "XB2180", "montura": "SIDERAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "CK25513", "montura": "CALVIN KLEIN", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 55000.0, "total": 55000.0, "venta": 196350.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "X8201", "montura": "FIORALBA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 37000.0, "total": 37000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "FEV1421", "montura": "FE VISION", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "XCL-12NV", "montura": "DXIX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 9000.0, "total": 9000.0, "venta": 32130.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6533", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": null, "group": "FOMENTO", "status": "comprado", "compradoColor": "rojo"}, {"ref": "SD1027", "montura": "SIDERAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "XCL-02CRV", "montura": "DXIX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 8000.0, "total": 8000.0, "venta": 28560.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "X8206", "montura": "FIORALBA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 37000.0, "total": 37000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "AZ4563", "montura": "GURA.BI", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "XCL-100NV", "montura": "DXIX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 10000.0, "total": 10000.0, "venta": 35700.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8522", "montura": "ZR METAL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 25000.0, "total": 25000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "SW11", "montura": "SEVEN'S WOMEN", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 35000.0, "total": 70000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "DX-02", "montura": "DXIX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 85000.0, "total": 85000.0, "venta": 303450.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "95314", "montura": "S.M.95314", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "2242", "montura": "SEA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 34000.0, "total": 34000.0, "venta": 121380.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "7065", "montura": "TOUS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 65000.0, "total": 65000.0, "venta": 232050.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "93393", "montura": "M.S.93393", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "TR3082", "montura": "ARTISANAT MONTURES", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "DB-21101", "montura": "DUBAI", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": 107100.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "91333", "montura": "S.M.91333", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 30000.0, "total": 60000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "ETG9612", "montura": "Ethereal Eye", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "LE6526", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR80084", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "FEV1424", "montura": "FE VISION", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "amarillo"}, {"ref": "D3329", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6515", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "S8096", "montura": "SEA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "LE6488", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "91392", "montura": "S.M.91392", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "AZ4568", "montura": "LE COMMERCE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 34000.0, "total": 34000.0, "venta": 121380.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "G8155", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "95673", "montura": "S.M.95673", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 30000.0, "total": 60000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "MOD7108", "montura": "MODA VISION", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "LE2041", "montura": "LENS HOUSE", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 80000.0, "total": 160000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "ZR80087", "montura": "ZR", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 35000.0, "total": 70000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "MB7133", "montura": "XANDER", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "rojo"}, {"ref": "LE6522", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8595", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 36000.0, "total": 36000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "82267", "montura": "FANDIA EYEWEAR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 33000.0, "total": 33000.0, "venta": 117810.0, "group": "MONTUGLASS", "status": "comprado", "compradoColor": "rojo"}, {"ref": "LE6488", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8601", "montura": "ZR", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 36000.0, "total": 72000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "SVN040", "montura": "SEVEN'S MEN", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 30000.0, "total": 30000.0, "venta": 107100.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "9784", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR68079", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 31000.0, "total": 31000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "VIS2408", "montura": "VISTARA VISION", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "OLD4341A", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "MY5209", "montura": "MY", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 18000.0, "total": 18000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "97760", "montura": "LE COMMERCE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "LE2047", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 80000.0, "total": 80000.0, "venta": 285600.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR8563", "montura": "ZR METAL", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 35000.0, "total": 70000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "DLN10172", "montura": "DLION", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 42000.0, "total": 42000.0, "venta": 149940.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "LH169002", "montura": "LENS HOUSE", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 26000.0, "total": 26000.0, "venta": 92820.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6548", "montura": "ZR", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 36000.0, "total": 36000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "TR27008", "montura": "SEA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "SK111004", "montura": "SILICON KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 10000.0, "total": 10000.0, "venta": 35700.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "ZR6512", "montura": "ZR", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 35000.0, "total": 70000.0, "venta": null, "group": "FOMENTO", "status": "disponible", "compradoColor": null}, {"ref": "82181", "montura": "BOTTICELLI", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 35000.0, "total": 35000.0, "venta": 124950.0, "group": "MONTUGLASS", "status": "disponible", "compradoColor": null}, {"ref": "SK111005", "montura": "SILICON KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 10000.0, "total": 10000.0, "venta": 35700.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "9228", "montura": "S.M.9228", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 19000.0, "total": 19000.0, "venta": null, "group": "FOMENTO", "status": "comprado", "compradoColor": "rojo"}, {"ref": "AX23608", "montura": "AEROX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 15000.0, "total": 15000.0, "venta": 53550.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "AX23601", "montura": "AEROX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 15000.0, "total": 15000.0, "venta": 53550.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "82251", "montura": "DYD", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 28000.0, "total": 28000.0, "venta": 99960.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "93397", "montura": "DYD", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 28000.0, "total": 28000.0, "venta": 99960.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "FIL-22076", "montura": "ALFIL", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 38000.0, "total": 76000.0, "venta": 135660.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "FIL-22073", "montura": "ALFIL", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 38000.0, "total": 38000.0, "venta": 135660.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "TH-23009", "montura": "TH", "cantidad": 2, "originalCantidad": 2, "vendidas": 0, "costo": 17000.0, "total": 34000.0, "venta": 60690.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "TH-23010", "montura": "TH", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 17000.0, "total": 17000.0, "venta": 60690.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "PK8803", "montura": "PRISS KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 24000.0, "total": 24000.0, "venta": 85680.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "JK134005", "montura": "JUMP KISS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 27000.0, "total": 27000.0, "venta": 96390.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "WA-1406", "montura": "WAIT KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 26000.0, "total": 26000.0, "venta": 92820.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "TK-23203", "montura": "TERRY KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 17000.0, "total": 17000.0, "venta": 60690.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "TK-23207", "montura": "TERRY KIDS", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 17000.0, "total": 17000.0, "venta": 60690.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "1022", "montura": "ITHACA", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 18000.0, "total": 18000.0, "venta": 64260.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "HS100002", "montura": "HOST", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 23000.0, "total": 23000.0, "venta": 82110.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "WL23304", "montura": "WILL FLEX", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 20000.0, "total": 20000.0, "venta": 71400.0, "group": "VISION DIGITAL", "status": "comprado", "compradoColor": "rojo"}, {"ref": "VT129004", "montura": "VERT", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 28000.0, "total": 28000.0, "venta": 99960.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}, {"ref": "DM002", "montura": "DIAMOND", "cantidad": 1, "originalCantidad": 1, "vendidas": 0, "costo": 20000.0, "total": 20000.0, "venta": 71400.0, "group": "VISION DIGITAL", "status": "disponible", "compradoColor": null}];
+const STORAGE = "opticaInventarioV3";
+let items = null;
+let editIndex = null;
+
+function load(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE));
+    // Si el navegador tenía un inventario vacío, NO dejamos que reemplace el inventario del Excel.
+    items = Array.isArray(saved) && saved.length ? saved : structuredClone(initial);
+  }catch(e){ items = structuredClone(initial); }
+  save();
+}
+const money = n => n===null || n===undefined || n==="" ? "—" :
+  new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Number(n));
+const esc = s => String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function save(){ localStorage.setItem(STORAGE, JSON.stringify(items)); }
+
+function render(){
+  const q=document.getElementById("search").value.toLowerCase().trim();
+  const f=document.getElementById("filter").value;
+  const g=document.getElementById("group").value;
+  const filtered=items.map((x,i)=>({...x,_i:i})).filter(x =>
+    (!q || String(x.ref).toLowerCase().includes(q) || String(x.montura).toLowerCase().includes(q)) &&
+    (f==="todos" || x.status===f) && (g==="todos" || x.group===g)
+  );
+  const tb=document.getElementById("tbody"); tb.innerHTML="";
+  filtered.forEach(x=>{
+    const tr=document.createElement("tr");
+    tr.className=x.compradoColor==="rojo"?"row-red":x.compradoColor==="amarillo"?"row-yellow":"";
+    const soldBtn = x.cantidad>0
+      ? `<button class="mini primary" onclick="sellItem(${x._i})">Vender</button>`
+      : `<button class="mini" onclick="restoreItem(${x._i})">Reactivar</button>`;
+    tr.innerHTML=`
+      <td class="ref">${esc(x.ref)}</td><td>${esc(x.montura)}</td><td>${esc(x.group)}</td>
+      <td>${x.cantidad}</td><td class="money">${money(x.costo)}</td><td class="money">${money(x.total)}</td>
+      <td class="money">${money(x.venta)}</td><td><span class="tag ${x.status}">${x.status==="vendido"?"Vendido":x.status==="comprado"?"Comprado":"Disponible"}</span></td>
+      <td><div class="actions"><button class="mini" onclick="editItem(${x._i})">Editar</button>${soldBtn}</div></td>`;
+    tb.appendChild(tr);
+  });
+  document.getElementById("empty").style.display=filtered.length?"none":"block";
+  const units=items.reduce((a,x)=>a+Number(x.cantidad||0),0);
+  const bought=items.filter(x=>x.status==="comprado").length;
+  const sold=items.reduce((a,x)=>a+Number(x.vendidas||0),0);
+  document.getElementById("sRefs").textContent=items.length;
+  document.getElementById("sUnits").textContent=units;
+  document.getElementById("sBought").textContent=bought;
+  document.getElementById("sSold").textContent=sold;
+}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",1800)}
+function openModal(i=null){
+  editIndex=i; document.getElementById("modal").classList.add("open");
+  document.getElementById("modalTitle").textContent=i===null?"Agregar montura":"Editar montura";
+  const x=i===null?{ref:"",montura:"",cantidad:1,costo:"",total:"",venta:"",group:"FOMENTO"}:items[i];
+  fRef.value=x.ref; fMontura.value=x.montura; fCantidad.value=x.cantidad; fCosto.value=x.costo??"";
+  fTotal.value=x.total??""; fVenta.value=x.venta??""; fGroup.value=x.group||"FOMENTO";
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+function saveItem(){
+  const obj={
+    ref:fRef.value.trim(), montura:fMontura.value.trim(), cantidad:Math.max(0,Number(fCantidad.value)||0),
+    originalCantidad:Math.max(0,Number(fCantidad.value)||0), vendidas:0,
+    costo:Number(fCosto.value)||0, total:Number(fTotal.value)||0, venta:fVenta.value===""?null:Number(fVenta.value),
+    group:fGroup.value, status:"disponible", compradoColor:null
+  };
+  if(!obj.ref||!obj.montura){alert("Completa la referencia y la montura.");return}
+  if(editIndex===null) items.push(obj);
+  else {
+    obj.vendidas=items[editIndex].vendidas||0;
+    obj.originalCantidad=Math.max(obj.cantidad+obj.vendidas, items[editIndex].originalCantidad||obj.cantidad);
+    obj.status=obj.cantidad===0?"vendido":items[editIndex].status;
+    obj.compradoColor=items[editIndex].compradoColor||null;
+    items[editIndex]=obj;
+  }
+  save();render();closeModal();toast("Montura guardada correctamente");
+}
+function editItem(i){openModal(i)}
+function sellItem(i){
+  const x=items[i];
+  if(x.cantidad<=0){toast("No quedan unidades disponibles");return}
+  x.cantidad--;
+  x.vendidas=(x.vendidas||0)+1;
+  if(x.cantidad===0) x.status="vendido";
+  save();render();toast("Venta registrada · queda "+x.cantidad+" unidad(es)");
+}
+function restoreItem(i){
+  const x=items[i];
+  if((x.vendidas||0)>0){x.vendidas--;x.cantidad++;x.status=x.compradoColor?"comprado":"disponible";save();render();toast("Unidad reactivada");}
+}
+function exportBackup(){
+  const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="respaldo_inventario_optica.json";a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importBackup(ev){
+  const file=ev.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!Array.isArray(data))throw 0;items=data;save();render();toast("Respaldo importado");}catch(e){alert("El archivo no es un respaldo válido.");}};
+  reader.readAsText(file); ev.target.value="";
+}
+load(); render();
+</script>
+</body>
+</html>
