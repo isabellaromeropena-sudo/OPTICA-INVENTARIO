@@ -58,7 +58,7 @@ tbody tr.row-red{background:#fff2f2}tbody tr.row-yellow{background:#fff9e7}tbody
       <option value="todos">Todos los estados</option><option value="disponible">Disponible</option><option value="comprado">Comprado</option><option value="vendido">Vendido</option>
     </select>
     <select id="group" onchange="render()">
-      <option value="todos">Todos los proveedores</option><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option>
+      <option value="todos">Todos los proveedores</option><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option><option>JORNADASL</option>
     </select>
     <button class="btn primary" onclick="openModal()">＋ Agregar montura</button>
     <button class="btn secondary" onclick="exportBackup()">Exportar respaldo</button>
@@ -93,7 +93,7 @@ tbody tr.row-red{background:#fff2f2}tbody tr.row-yellow{background:#fff9e7}tbody
    <div class="field"><label>Costo unitario</label><input id="fCosto" type="number" min="0"></div>
    <div class="field"><label>Costo total</label><input id="fTotal" type="number" min="0"></div>
    <div class="field"><label>Precio de venta</label><input id="fVenta" type="number" min="0"></div>
-   <div class="field full"><label>Proveedor</label><select id="fGroup"><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option></select></div>
+   <div class="field full"><label>Proveedor</label><select id="fGroup"><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option><option>JORNADAS</option></select></div>
   </div>
   <div class="modal-actions"><button class="btn secondary" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="saveItem()">Guardar montura</button></div>
  </div>
