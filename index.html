@@ -52,6 +52,37 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 </style>
 </head>
 <body>
+
+<div id="loginScreen" style="position:fixed;inset:0;background:linear-gradient(135deg,#fbfaf7,#f4f0e7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999;">
+  <div style="width:min(430px,100%);background:#fff;border:1px solid #e8e1d5;border-radius:26px;padding:34px;box-shadow:0 30px 80px rgba(0,0,0,.14);">
+    <div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(145deg,#d8b86c,#b98b34);display:grid;place-items:center;color:#fff;font-size:29px;margin:0 auto 18px;box-shadow:0 9px 24px rgba(184,139,52,.25)">◉</div>
+    <h2 style="margin:0;text-align:center;font-size:25px;">Óptica · Inventario</h2>
+    <p style="text-align:center;color:#7d766b;margin:8px 0 26px;">Acceso de gerencia</p>
+
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;color:#766f65;margin:0 0 6px;">Correo electrónico</label>
+      <input id="loginEmail" type="email" autocomplete="username" value="gerencia@hrvisionoptica.com"
+        style="width:100%;height:50px;border:1px solid #e8e1d5;border-radius:12px;padding:0 13px;font-size:15px;outline:none;">
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;color:#766f65;margin:0 0 6px;">Contraseña</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Ingresa tu contraseña"
+        style="width:100%;height:50px;border:1px solid #e8e1d5;border-radius:12px;padding:0 13px;font-size:15px;outline:none;">
+    </div>
+
+    <div id="loginError" style="display:none;color:#b83b42;background:#fff1f1;border-radius:12px;padding:11px 12px;font-size:13px;margin-bottom:14px;"></div>
+
+    <button id="loginButton" type="button"
+      style="width:100%;height:52px;border:0;border-radius:14px;background:#c49a42;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
+      Ingresar
+    </button>
+
+    <div style="text-align:center;color:#9b9183;font-size:12px;margin-top:15px;">Acceso protegido por Firebase</div>
+  </div>
+</div>
+
+<div id="appContent" style="display:none;">
 <header>
   <div class="logo">◉</div>
   <div style="flex:1"><h1>Óptica · Inventario</h1><div class="subtitle">Control de monturas, costos, precio de venta automático y ventas</div></div>
@@ -99,6 +130,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
   </section>
   <div class="footer">Los cambios se guardan automáticamente en este navegador · Cada montura física es una fila independiente, así que vender una unidad de una referencia con varias nunca afecta a las demás · Precio de venta = costo + 19% × 3, calculado automáticamente.</div>
 </main>
+</div>
 
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
  <div class="dialog">
@@ -461,12 +493,15 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 
   function showLogin(message=""){
     document.getElementById("loginScreen").style.display="flex";
-    document.getElementById("loginError").style.display=message?"block":"none";
-    document.getElementById("loginError").textContent=message;
+    document.getElementById("appContent").style.display="none";
+    const error=document.getElementById("loginError");
+    error.textContent=message;
+    error.style.display=message?"block":"none";
   }
 
   function hideLogin(){
     document.getElementById("loginScreen").style.display="none";
+    document.getElementById("appContent").style.display="block";
     document.getElementById("loginError").style.display="none";
   }
 
@@ -494,6 +529,8 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
         msg="Demasiados intentos. Espera unos minutos y vuelve a intentar.";
       }else if(e.code==="auth/invalid-email"){
         msg="El correo electrónico no es válido.";
+      }else if(e.code==="auth/operation-not-allowed"){
+        msg="Debes activar 'Correo electrónico/contraseña' en Firebase Authentication.";
       }
       showLogin(msg);
     }finally{
@@ -506,7 +543,8 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     try{
       await signOut(auth);
     }catch(e){
-      console.error(e);
+      console.error("Cerrar sesión:",e);
+      showLogin("No se pudo cerrar la sesión.");
     }
   }
 
@@ -517,7 +555,6 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 
   onAuthStateChanged(auth, async user=>{
     if(user){
-      // Solo después de autenticarse se inicia la conexión con Firestore.
       try{
         await initializeInventory();
         hideLogin();
@@ -543,4 +580,3 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 </script>
 </body>
 </html>
-
