@@ -29,17 +29,19 @@ select,.btn{height:56px;border-radius:15px;border:1px solid var(--line);padding:
 .tablewrap{background:#fff;border:1px solid var(--line);border-radius:25px;overflow:auto;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;min-width:1150px}th{text-align:left;padding:17px 18px;color:#766f65;font-size:12px;text-transform:uppercase;letter-spacing:.7px;background:#fbfaf7;border-bottom:1px solid var(--line)}
 td{padding:16px 18px;border-bottom:1px solid #eee8de;font-size:14px;vertical-align:middle}tbody tr:last-child td{border-bottom:0}
-tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody tr:hover{filter:brightness(.985)}
+tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody tr.row-confirmed{background:#eafbf1}tbody tr:hover{filter:brightness(.985)}
 .ref{font-weight:800;color:#8d6823}.unit-tag{color:#a89c86;font-size:12px}.money{font-variant-numeric:tabular-nums}
 .tag{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}
 .tag.disponible{background:#e7f6f0;color:#23785e}
 .tag.vendido-normal{background:#fbdfe0;color:#a4272c}
 .tag.vendido-costo{background:#faedc6;color:#8a660a}
+.tag.confirmada{background:#d7f3e3;color:#1b6b4d}
 .actions{display:flex;gap:6px;flex-wrap:wrap}.mini{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer;font-size:12.5px;white-space:nowrap}
 .mini.red{color:#fff;background:var(--red);border-color:var(--red)}
 .mini.yellow{color:#fff;background:var(--yellow);border-color:var(--yellow)}
 .mini.green{color:#fff;background:var(--green);border-color:var(--green)}
 .mini.danger{color:#b83b42}
+.mini.confirmed{color:#1b6b4d;background:#eafbf1;border-color:#bfe9d3}
 .empty{text-align:center;padding:45px;color:#8c8378}.footer{text-align:center;color:#968d81;font-size:13px;margin-top:18px}
 .modal{position:fixed;inset:0;background:rgba(36,30,21,.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.open{display:flex}
 .dialog{width:min(680px,100%);background:#fff;border-radius:26px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.2)}
@@ -72,6 +74,8 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
       <option value="disponible">Disponible</option>
       <option value="vendido-normal">Vendida</option>
       <option value="vendido-costo">Vendida a costo</option>
+      <option value="confirmada">Confirmada (conteo)</option>
+      <option value="pendiente">Pendiente de confirmar</option>
     </select>
     <select id="group" onchange="render()">
       <option value="todos">Todos los proveedores</option><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option><option>JORNADAS</option>
@@ -87,6 +91,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     <span><i class="dot red"></i>Vendida (venta normal)</span>
     <span><i class="dot yellow"></i>Vendida a costo (familiares)</span>
     <span><i class="dot green"></i>Disponible</span>
+    <span id="confirmProgress"></span>
   </div>
 
   <section class="tablewrap">
@@ -126,7 +131,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
   } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSy5dC1sFxKyWJsYvOIuzjMDCGO4TlU_vATE",
+    apiKey: "AIzaSyD5s1CfxKyWJsYvOIuzjMDCGO4TlU_vATE",
     authDomain: "optica-inventario.firebaseapp.com",
     projectId: "optica-inventario",
     storageBucket: "optica-inventario.firebasestorage.app",
@@ -174,8 +179,6 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     const ref = collection(db, INVENTORY_COLLECTION);
     const snap = await getDocs(ref);
 
-    // Si Firestore está vacío, conserva primero el inventario actual
-    // del navegador; si tampoco existe, usa el inventario incluido en el HTML.
     if(snap.empty){
       let seed = null;
       try{
@@ -216,12 +219,14 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
   function rowClass(x){
     if(x.status==="vendido" && x.tipo==="normal") return "row-red";
     if(x.status==="vendido" && x.tipo==="costo") return "row-yellow";
+    if(x.status==="disponible" && x.confirmado) return "row-confirmed";
     return "";
   }
 
   function tagInfo(x){
     if(x.status==="vendido" && x.tipo==="normal") return {cls:"vendido-normal", label:"Vendida"};
     if(x.status==="vendido" && x.tipo==="costo") return {cls:"vendido-costo", label:"Vendida a costo"};
+    if(x.status==="disponible" && x.confirmado) return {cls:"confirmada", label:"Confirmada"};
     return {cls:"disponible", label:"Disponible"};
   }
 
@@ -230,6 +235,8 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     if(f==="disponible") return x.status==="disponible";
     if(f==="vendido-normal") return x.status==="vendido" && x.tipo==="normal";
     if(f==="vendido-costo") return x.status==="vendido" && x.tipo==="costo";
+    if(f==="confirmada") return x.status==="disponible" && !!x.confirmado;
+    if(f==="pendiente") return x.status==="disponible" && !x.confirmado;
     return true;
   }
 
@@ -265,7 +272,11 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
       const tag=tagInfo(x);
       let actionBtns="";
       if(x.status==="disponible"){
-        actionBtns = `<button class="mini red" onclick="sellItem(${x._i},'normal')">Vender</button>
+        const confirmBtn = x.confirmado
+          ? `<button class="mini confirmed" onclick="toggleConfirm(${x._i})">✓ Confirmada</button>`
+          : `<button class="mini green" onclick="toggleConfirm(${x._i})">✓ Confirmar</button>`;
+        actionBtns = `${confirmBtn}
+                      <button class="mini red" onclick="sellItem(${x._i},'normal')">Vender</button>
                       <button class="mini yellow" onclick="sellItem(${x._i},'costo')">A costo</button>`;
       } else {
         actionBtns = `<button class="mini green" onclick="restoreItem(${x._i})">Reactivar</button>`;
@@ -287,11 +298,15 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     const avail=items.filter(x=>x.status==="disponible").length;
     const soldNormal=items.filter(x=>x.status==="vendido" && x.tipo==="normal").length;
     const soldCost=items.filter(x=>x.status==="vendido" && x.tipo==="costo").length;
+    const confirmedCount=items.filter(x=>x.status==="disponible" && x.confirmado).length;
     document.getElementById("sRefs").textContent=refsSet.size;
     document.getElementById("sUnits").textContent=items.length;
     document.getElementById("sAvail").textContent=avail;
     document.getElementById("sSold").textContent=soldNormal;
     document.getElementById("sSoldCost").textContent=soldCost;
+    document.getElementById("confirmProgress").textContent = avail
+      ? `✓ ${confirmedCount} de ${avail} disponibles confirmadas en el conteo`
+      : "";
   }
 
   function toast(msg){
@@ -362,7 +377,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
         for(let n=0;n<cantidad;n++){
           const item={
             id:maxId+n+1, ref, montura, costo, venta, group,
-            status:"disponible", tipo:null
+            status:"disponible", tipo:null, confirmado:false
           };
           batch.set(doc(db,INVENTORY_COLLECTION,String(item.id)),item);
         }
@@ -419,6 +434,18 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     }
   }
 
+  async function toggleConfirm(i){
+    const x=items[i];
+    if(x.status!=="disponible")return;
+    try{
+      await saveItemToFirebase({...x, confirmado: !x.confirmado});
+      toast(x.confirmado ? "Unidad marcada como pendiente" : "Unidad confirmada en el conteo");
+    }catch(e){
+      console.error(e);
+      toast("No se pudo actualizar la confirmación");
+    }
+  }
+
   function exportBackup(){
     const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});
     const a=document.createElement("a");
@@ -458,7 +485,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
   // Los onclick existentes del HTML siguen funcionando.
   Object.assign(window,{
     render,openModal,closeModal,saveItem,editItem,deleteItem,
-    sellItem,restoreItem,exportBackup,importBackup,
+    sellItem,restoreItem,toggleConfirm,exportBackup,importBackup,
     updateVentaPreview,onVentaEdit,resetVentaAuto
   });
 
