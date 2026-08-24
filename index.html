@@ -117,191 +117,367 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 </div>
 <div id="toast" class="toast"></div>
 
-<script>
-const initial = [{"id":1,"ref":"ZR8510","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":2,"ref":"ZR6545","montura":"NYLON","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":3,"ref":"BC68115","montura":"FIORALBA","costo":38000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":4,"ref":"ZR8516","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":5,"ref":"ZR8516","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":6,"ref":"ZT8909","montura":"FIORALBA","costo":26000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":7,"ref":"93530","montura":"M.S.93530","costo":34000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":8,"ref":"ZR6218","montura":"ZR METAL","costo":28000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":9,"ref":"ZB1859","montura":"ZB METAL","costo":28000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":10,"ref":"ZR8529","montura":"ZR METAL","costo":34000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":11,"ref":"ZR8529","montura":"ZR METAL","costo":34000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":12,"ref":"ZR8554","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":13,"ref":"X8201","montura":"FIORALBA","costo":37000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":14,"ref":"ZR6533","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":15,"ref":"X8206","montura":"FIORALBA","costo":37000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":16,"ref":"ZR8522","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":17,"ref":"95314","montura":"S.M.95314","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":18,"ref":"93393","montura":"M.S.93393","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":19,"ref":"91333","montura":"S.M.91333","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":20,"ref":"91333","montura":"S.M.91333","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":21,"ref":"ZR80084","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":22,"ref":"ZR6515","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":23,"ref":"91392","montura":"S.M.91392","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":24,"ref":"95673","montura":"S.M.95673","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":25,"ref":"95673","montura":"S.M.95673","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":26,"ref":"ZR80087","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":27,"ref":"ZR80087","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":28,"ref":"ZR8595","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":29,"ref":"ZR8601","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":30,"ref":"ZR8601","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":31,"ref":"ZR68079","montura":"ZR","costo":31000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":32,"ref":"MY5209","montura":"MY","costo":18000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":33,"ref":"ZR8563","montura":"ZR METAL","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":34,"ref":"ZR8563","montura":"ZR METAL","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":35,"ref":"ZR6548","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":36,"ref":"ZR6512","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":37,"ref":"ZR6512","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":38,"ref":"9228","montura":"S.M.9228","costo":19000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":39,"ref":"ETG9613","montura":"Ethereal Eye","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":40,"ref":"IMP029","montura":"IMPERIO","costo":32000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":41,"ref":"IMP029","montura":"IMPERIO","costo":32000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":42,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":43,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":44,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":45,"ref":"95716","montura":"LOVELIGHT","costo":30000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":46,"ref":"M005","montura":"MIU MIU","costo":50000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":47,"ref":"AZ4568","montura":"LE COMMERCE","costo":34000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":48,"ref":"SVN046","montura":"SEVEN'S MEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":49,"ref":"81571","montura":"M. DAMA","costo":34000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":50,"ref":"81571","montura":"LE COMMERCE","costo":35000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":51,"ref":"XB2180","montura":"SIDERAL","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":52,"ref":"FEV1421","montura":"FE VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":53,"ref":"SD1027","montura":"SIDERAL","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":54,"ref":"AZ4563","montura":"GURA.BI","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":55,"ref":"SW11","montura":"SEVEN'S WOMEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":56,"ref":"SW11","montura":"SEVEN'S WOMEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":57,"ref":"2242","montura":"SEA","costo":34000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":58,"ref":"TR3082","montura":"ARTISANAT MONTURES","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":59,"ref":"ETG9612","montura":"Ethereal Eye","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":60,"ref":"FEV1424","montura":"FE VISION","costo":35000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":61,"ref":"S8096","montura":"SEA","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":62,"ref":"AZ4568","montura":"LE COMMERCE","costo":34000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":63,"ref":"MOD7108","montura":"MODA VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":64,"ref":"MB7133","montura":"XANDER","costo":42000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":65,"ref":"82267","montura":"FANDIA EYEWEAR","costo":33000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":66,"ref":"SVN040","montura":"SEVEN'S MEN","costo":30000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":67,"ref":"VIS2408","montura":"VISTARA VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":68,"ref":"97760","montura":"LE COMMERCE","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":69,"ref":"DLN10172","montura":"DLION","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":70,"ref":"TR27008","montura":"SEA","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":71,"ref":"82181","montura":"BOTTICELLI","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":72,"ref":"SK1012","montura":"SWAROVSKI","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":73,"ref":"HER0151","montura":"CAROLINA HERRERA","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":74,"ref":"HER0152","montura":"CAROLINA HERRERA","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":75,"ref":"CT0486O","montura":"CARTIER","costo":65000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":76,"ref":"MU66Z","montura":"MIU MIU","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":77,"ref":"TH1286","montura":"TOMMY HILFIGER","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":78,"ref":"TH1286","montura":"TOMMY HILFIGER","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":79,"ref":"K502-07","montura":"UNDER ARMOUR","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":80,"ref":"OX8156-1155","montura":"OAKLEY","costo":55000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":81,"ref":"OX8096-0354","montura":"OAKLEY","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":82,"ref":"CK25513","montura":"CALVIN KLEIN","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":83,"ref":"XCL-12NV","montura":"DXIX","costo":9000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":84,"ref":"XCL-02CRV","montura":"DXIX","costo":8000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":85,"ref":"XCL-100NV","montura":"DXIX","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":86,"ref":"DX-02","montura":"DXIX","costo":85000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":87,"ref":"7065","montura":"TOUS","costo":65000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":88,"ref":"DB-21101","montura":"DUBAI","costo":30000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":89,"ref":"LE6526","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":90,"ref":"D3329","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":91,"ref":"LE6488","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":92,"ref":"G8155","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":93,"ref":"LE2041","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":94,"ref":"LE2041","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":95,"ref":"LE6522","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":96,"ref":"LE6488","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":97,"ref":"9784","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":98,"ref":"OLD4341A","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":99,"ref":"LE2047","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":100,"ref":"LH169002","montura":"LENS HOUSE","costo":26000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":101,"ref":"SK111004","montura":"SILICON KIDS","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":102,"ref":"SK111005","montura":"SILICON KIDS","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":103,"ref":"AX23608","montura":"AEROX","costo":15000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":104,"ref":"AX23601","montura":"AEROX","costo":15000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":105,"ref":"82251","montura":"DYD","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":106,"ref":"93397","montura":"DYD","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":107,"ref":"FIL-22076","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":108,"ref":"FIL-22076","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":109,"ref":"FIL-22073","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":110,"ref":"TH-23009","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":111,"ref":"TH-23009","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":112,"ref":"TH-23010","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":113,"ref":"PK8803","montura":"PRISS KIDS","costo":24000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":114,"ref":"JK134005","montura":"JUMP KISS","costo":27000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":115,"ref":"WA-1406","montura":"WAIT KIDS","costo":26000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":116,"ref":"TK-23203","montura":"TERRY KIDS","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":117,"ref":"TK-23207","montura":"TERRY KIDS","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":118,"ref":"1022","montura":"ITHACA","costo":18000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":119,"ref":"HS100002","montura":"HOST","costo":23000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":120,"ref":"WL23304","montura":"WILL FLEX","costo":20000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":121,"ref":"VT129004","montura":"VERT","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":122,"ref":"DM002","montura":"DIAMOND","costo":20000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null}]
-;
-const STORAGE = "opticaInventarioV4";
-let items = null;
-let editIndex = null;
+<script type="module">
+  // Firebase + Cloud Firestore
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+  import {
+    getFirestore, collection, doc, getDocs, setDoc, deleteDoc,
+    onSnapshot, writeBatch
+  } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-function ventaAuto(costo){
-  const c = Number(costo)||0;
-  return Math.round(c * 1.19 * 3);
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSy5dC1sFxKyWJsYvOIuzjMDCGO4TlU_vATE",
+    authDomain: "optica-inventario.firebaseapp.com",
+    projectId: "optica-inventario",
+    storageBucket: "optica-inventario.firebasestorage.app",
+    messagingSenderId: "78826450721",
+    appId: "1:78826450721:web:d0a1ecb5d7f0c233a6d860"
+  };
 
-function load(){
-  try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE));
-    items = Array.isArray(saved) && saved.length ? saved : structuredClone(initial);
-  }catch(e){ items = structuredClone(initial); }
-  save();
-}
-const money = n => n===null || n===undefined || n==="" ? "—" :
-  new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Number(n));
-const esc = s => String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function save(){ localStorage.setItem(STORAGE, JSON.stringify(items)); }
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const INVENTORY_COLLECTION = "inventario_optica";
 
-function rowClass(x){
-  if(x.status==="vendido" && x.tipo==="normal") return "row-red";
-  if(x.status==="vendido" && x.tipo==="costo") return "row-yellow";
-  return "";
-}
-function tagInfo(x){
-  if(x.status==="vendido" && x.tipo==="normal") return {cls:"vendido-normal", label:"Vendida"};
-  if(x.status==="vendido" && x.tipo==="costo") return {cls:"vendido-costo", label:"Vendida a costo"};
-  return {cls:"disponible", label:"Disponible"};
-}
-function matchesFilter(x, f){
-  if(f==="todos") return true;
-  if(f==="disponible") return x.status==="disponible";
-  if(f==="vendido-normal") return x.status==="vendido" && x.tipo==="normal";
-  if(f==="vendido-costo") return x.status==="vendido" && x.tipo==="costo";
-  return true;
-}
+  const initial = [{"id":1,"ref":"ZR8510","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":2,"ref":"ZR6545","montura":"NYLON","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":3,"ref":"BC68115","montura":"FIORALBA","costo":38000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":4,"ref":"ZR8516","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":5,"ref":"ZR8516","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":6,"ref":"ZT8909","montura":"FIORALBA","costo":26000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":7,"ref":"93530","montura":"M.S.93530","costo":34000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":8,"ref":"ZR6218","montura":"ZR METAL","costo":28000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":9,"ref":"ZB1859","montura":"ZB METAL","costo":28000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":10,"ref":"ZR8529","montura":"ZR METAL","costo":34000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":11,"ref":"ZR8529","montura":"ZR METAL","costo":34000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":12,"ref":"ZR8554","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":13,"ref":"X8201","montura":"FIORALBA","costo":37000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":14,"ref":"ZR6533","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":15,"ref":"X8206","montura":"FIORALBA","costo":37000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":16,"ref":"ZR8522","montura":"ZR METAL","costo":25000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":17,"ref":"95314","montura":"S.M.95314","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":18,"ref":"93393","montura":"M.S.93393","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":19,"ref":"91333","montura":"S.M.91333","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":20,"ref":"91333","montura":"S.M.91333","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":21,"ref":"ZR80084","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":22,"ref":"ZR6515","montura":"ZR","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":23,"ref":"91392","montura":"S.M.91392","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":24,"ref":"95673","montura":"S.M.95673","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":25,"ref":"95673","montura":"S.M.95673","costo":30000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":26,"ref":"ZR80087","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":27,"ref":"ZR80087","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":28,"ref":"ZR8595","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":29,"ref":"ZR8601","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":30,"ref":"ZR8601","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":31,"ref":"ZR68079","montura":"ZR","costo":31000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":32,"ref":"MY5209","montura":"MY","costo":18000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":33,"ref":"ZR8563","montura":"ZR METAL","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":34,"ref":"ZR8563","montura":"ZR METAL","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":35,"ref":"ZR6548","montura":"ZR","costo":36000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":36,"ref":"ZR6512","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":37,"ref":"ZR6512","montura":"ZR","costo":35000.0,"group":"FOMENTO","status":"disponible","tipo":null},{"id":38,"ref":"9228","montura":"S.M.9228","costo":19000.0,"group":"FOMENTO","status":"vendido","tipo":"normal"},{"id":39,"ref":"ETG9613","montura":"Ethereal Eye","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":40,"ref":"IMP029","montura":"IMPERIO","costo":32000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":41,"ref":"IMP029","montura":"IMPERIO","costo":32000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":42,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":43,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":44,"ref":"IMP025","montura":"IMPERIO","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":45,"ref":"95716","montura":"LOVELIGHT","costo":30000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":46,"ref":"M005","montura":"MIU MIU","costo":50000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":47,"ref":"AZ4568","montura":"LE COMMERCE","costo":34000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":48,"ref":"SVN046","montura":"SEVEN'S MEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":49,"ref":"81571","montura":"M. DAMA","costo":34000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":50,"ref":"81571","montura":"LE COMMERCE","costo":35000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":51,"ref":"XB2180","montura":"SIDERAL","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":52,"ref":"FEV1421","montura":"FE VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":53,"ref":"SD1027","montura":"SIDERAL","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":54,"ref":"AZ4563","montura":"GURA.BI","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":55,"ref":"SW11","montura":"SEVEN'S WOMEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":56,"ref":"SW11","montura":"SEVEN'S WOMEN","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":57,"ref":"2242","montura":"SEA","costo":34000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":58,"ref":"TR3082","montura":"ARTISANAT MONTURES","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":59,"ref":"ETG9612","montura":"Ethereal Eye","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":60,"ref":"FEV1424","montura":"FE VISION","costo":35000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":61,"ref":"S8096","montura":"SEA","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":62,"ref":"AZ4568","montura":"LE COMMERCE","costo":34000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":63,"ref":"MOD7108","montura":"MODA VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":64,"ref":"MB7133","montura":"XANDER","costo":42000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":65,"ref":"82267","montura":"FANDIA EYEWEAR","costo":33000.0,"group":"MONTUGLASS","status":"vendido","tipo":"normal"},{"id":66,"ref":"SVN040","montura":"SEVEN'S MEN","costo":30000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":67,"ref":"VIS2408","montura":"VISTARA VISION","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":68,"ref":"97760","montura":"LE COMMERCE","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":69,"ref":"DLN10172","montura":"DLION","costo":42000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":70,"ref":"TR27008","montura":"SEA","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":71,"ref":"82181","montura":"BOTTICELLI","costo":35000.0,"group":"MONTUGLASS","status":"disponible","tipo":null},{"id":72,"ref":"SK1012","montura":"SWAROVSKI","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":73,"ref":"HER0151","montura":"CAROLINA HERRERA","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":74,"ref":"HER0152","montura":"CAROLINA HERRERA","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":75,"ref":"CT0486O","montura":"CARTIER","costo":65000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":76,"ref":"MU66Z","montura":"MIU MIU","costo":65000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":77,"ref":"TH1286","montura":"TOMMY HILFIGER","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":78,"ref":"TH1286","montura":"TOMMY HILFIGER","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":79,"ref":"K502-07","montura":"UNDER ARMOUR","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":80,"ref":"OX8156-1155","montura":"OAKLEY","costo":55000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":81,"ref":"OX8096-0354","montura":"OAKLEY","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":82,"ref":"CK25513","montura":"CALVIN KLEIN","costo":55000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":83,"ref":"XCL-12NV","montura":"DXIX","costo":9000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":84,"ref":"XCL-02CRV","montura":"DXIX","costo":8000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":85,"ref":"XCL-100NV","montura":"DXIX","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":86,"ref":"DX-02","montura":"DXIX","costo":85000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":87,"ref":"7065","montura":"TOUS","costo":65000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":88,"ref":"DB-21101","montura":"DUBAI","costo":30000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":89,"ref":"LE6526","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":90,"ref":"D3329","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":91,"ref":"LE6488","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":92,"ref":"G8155","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":93,"ref":"LE2041","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":94,"ref":"LE2041","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":95,"ref":"LE6522","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":96,"ref":"LE6488","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":97,"ref":"9784","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":98,"ref":"OLD4341A","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":99,"ref":"LE2047","montura":"LENS HOUSE","costo":80000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":100,"ref":"LH169002","montura":"LENS HOUSE","costo":26000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":101,"ref":"SK111004","montura":"SILICON KIDS","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":102,"ref":"SK111005","montura":"SILICON KIDS","costo":10000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":103,"ref":"AX23608","montura":"AEROX","costo":15000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":104,"ref":"AX23601","montura":"AEROX","costo":15000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":105,"ref":"82251","montura":"DYD","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":106,"ref":"93397","montura":"DYD","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":107,"ref":"FIL-22076","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":108,"ref":"FIL-22076","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":109,"ref":"FIL-22073","montura":"ALFIL","costo":38000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":110,"ref":"TH-23009","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":111,"ref":"TH-23009","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":112,"ref":"TH-23010","montura":"TH","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":113,"ref":"PK8803","montura":"PRISS KIDS","costo":24000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":114,"ref":"JK134005","montura":"JUMP KISS","costo":27000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":115,"ref":"WA-1406","montura":"WAIT KIDS","costo":26000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":116,"ref":"TK-23203","montura":"TERRY KIDS","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":117,"ref":"TK-23207","montura":"TERRY KIDS","costo":17000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":118,"ref":"1022","montura":"ITHACA","costo":18000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":119,"ref":"HS100002","montura":"HOST","costo":23000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":120,"ref":"WL23304","montura":"WILL FLEX","costo":20000.0,"group":"VISION DIGITAL","status":"vendido","tipo":"normal"},{"id":121,"ref":"VT129004","montura":"VERT","costo":28000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null},{"id":122,"ref":"DM002","montura":"DIAMOND","costo":20000.0,"group":"VISION DIGITAL","status":"disponible","tipo":null}];
+  const STORAGE = "opticaInventarioV4";
+  let items = [];
+  let editIndex = null;
+  let ventaManual = false;
+  let firebaseReady = false;
 
-function render(){
-  const q=document.getElementById("search").value.toLowerCase().trim();
-  const f=document.getElementById("filter").value;
-  const g=document.getElementById("group").value;
+  function ventaAuto(costo){
+    const c = Number(costo)||0;
+    return Math.round(c * 1.19 * 3);
+  }
 
-  // contar unidades por referencia+montura para mostrar "1/2" etc.
-  const counts={};
-  items.forEach(x=>{ const k=x.ref+"||"+x.montura; counts[k]=(counts[k]||0)+1; });
-  const seen={};
+  const money = n => n===null || n===undefined || n==="" ? "—" :
+    new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Number(n));
 
-  const filtered=items.map((x,i)=>({...x,_i:i})).filter(x =>
-    (!q || String(x.ref).toLowerCase().includes(q) || String(x.montura).toLowerCase().includes(q)) &&
-    matchesFilter(x, f) && (g==="todos" || x.group===g)
-  );
+  const esc = s => String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 
-  const tb=document.getElementById("tbody"); tb.innerHTML="";
-  filtered.forEach(x=>{
-    const k=x.ref+"||"+x.montura;
-    seen[k]=(seen[k]||0)+1;
-    const total=counts[k];
-    const unitLabel = total>1 ? `<div class="unit-tag">unidad ${seen[k]} de ${total}</div>` : "";
-    const venta = x.venta!==null && x.venta!==undefined ? x.venta : ventaAuto(x.costo);
-    const tr=document.createElement("tr");
-    tr.className=rowClass(x);
-    const tag=tagInfo(x);
-    let actionBtns="";
-    if(x.status==="disponible"){
-      actionBtns = `<button class="mini red" onclick="sellItem(${x._i},'normal')">Vender</button>
-                    <button class="mini yellow" onclick="sellItem(${x._i},'costo')">A costo</button>`;
-    } else {
-      actionBtns = `<button class="mini green" onclick="restoreItem(${x._i})">Reactivar</button>`;
+  function setItems(data){
+    items = Array.isArray(data) ? data : [];
+    render();
+  }
+
+  async function saveItemToFirebase(item){
+    if(!firebaseReady) throw new Error("Firebase no está listo");
+    await setDoc(doc(db, INVENTORY_COLLECTION, String(item.id)), item);
+  }
+
+  async function deleteItemFromFirebase(item){
+    if(!firebaseReady) throw new Error("Firebase no está listo");
+    await deleteDoc(doc(db, INVENTORY_COLLECTION, String(item.id)));
+  }
+
+  async function initializeInventory(){
+    const ref = collection(db, INVENTORY_COLLECTION);
+    const snap = await getDocs(ref);
+
+    // Si Firestore está vacío, conserva primero el inventario actual
+    // del navegador; si tampoco existe, usa el inventario incluido en el HTML.
+    if(snap.empty){
+      let seed = null;
+      try{
+        const local = JSON.parse(localStorage.getItem(STORAGE));
+        if(Array.isArray(local) && local.length) seed = local;
+      }catch(e){}
+
+      if(!seed) seed = structuredClone(initial);
+
+      const batch = writeBatch(db);
+      seed.forEach((item, index) => {
+        const clean = {...item, id:Number(item.id)||index+1};
+        batch.set(doc(ref, String(clean.id)), clean);
+      });
+      await batch.commit();
     }
-    tr.innerHTML=`
-      <td class="ref">${esc(x.ref)}</td>
-      <td>${esc(x.montura)}${unitLabel}</td>
-      <td>${esc(x.group)}</td>
-      <td class="money">${money(x.costo)}</td>
-      <td class="money">${money(venta)}</td>
-      <td><span class="tag ${tag.cls}">${tag.label}</span></td>
-      <td><div class="actions">${actionBtns}<button class="mini" onclick="editItem(${x._i})">Editar</button><button class="mini danger" onclick="deleteItem(${x._i})">Eliminar</button></div></td>`;
-    tb.appendChild(tr);
-  });
-  document.getElementById("empty").style.display=filtered.length?"none":"block";
 
-  const refsSet=new Set(items.map(x=>x.ref+"||"+x.montura));
-  const avail=items.filter(x=>x.status==="disponible").length;
-  const soldNormal=items.filter(x=>x.status==="vendido" && x.tipo==="normal").length;
-  const soldCost=items.filter(x=>x.status==="vendido" && x.tipo==="costo").length;
-  document.getElementById("sRefs").textContent=refsSet.size;
-  document.getElementById("sUnits").textContent=items.length;
-  document.getElementById("sAvail").textContent=avail;
-  document.getElementById("sSold").textContent=soldNormal;
-  document.getElementById("sSoldCost").textContent=soldCost;
-}
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",1800)}
+    firebaseReady = true;
+  }
 
-let ventaManual = false;
+  function subscribeInventory(){
+    onSnapshot(
+      collection(db, INVENTORY_COLLECTION),
+      snapshot => {
+        const data = snapshot.docs.map(d => d.data());
+        data.sort((a,b) => Number(a.id || 0) - Number(b.id || 0));
+        setItems(data);
+        try{ localStorage.setItem(STORAGE, JSON.stringify(items)); }catch(e){}
+      },
+      error => {
+        console.error("Firestore:", error);
+        firebaseReady = false;
+        toast("No se pudo conectar con Firebase");
+      }
+    );
+  }
 
-function updateVentaPreview(){
-  if(ventaManual) return;
-  document.getElementById("fVenta").value = ventaAuto(document.getElementById("fCosto").value);
-}
-function onVentaEdit(){
-  ventaManual = true;
-  document.getElementById("fVentaTag").textContent = "(fijado manualmente)";
-  document.getElementById("fResetWrap").style.display = "";
-}
-function resetVentaAuto(){
-  ventaManual = false;
-  document.getElementById("fVentaTag").textContent = "(automático)";
-  document.getElementById("fResetWrap").style.display = "none";
-  updateVentaPreview();
-}
+  function rowClass(x){
+    if(x.status==="vendido" && x.tipo==="normal") return "row-red";
+    if(x.status==="vendido" && x.tipo==="costo") return "row-yellow";
+    return "";
+  }
 
-function openModal(i=null){
-  editIndex=i; document.getElementById("modal").classList.add("open");
-  document.getElementById("modalTitle").textContent=i===null?"Agregar montura":"Editar montura";
-  document.getElementById("fCantidadWrap").style.display = i===null ? "" : "none";
-  const x=i===null?{ref:"",montura:"",costo:"",group:"FOMENTO",venta:null}:items[i];
-  fRef.value=x.ref; fMontura.value=x.montura; fCantidad.value=1; fCosto.value=x.costo??"";
-  fGroup.value=x.group||"FOMENTO";
-  if(x.venta!==null && x.venta!==undefined){
+  function tagInfo(x){
+    if(x.status==="vendido" && x.tipo==="normal") return {cls:"vendido-normal", label:"Vendida"};
+    if(x.status==="vendido" && x.tipo==="costo") return {cls:"vendido-costo", label:"Vendida a costo"};
+    return {cls:"disponible", label:"Disponible"};
+  }
+
+  function matchesFilter(x, f){
+    if(f==="todos") return true;
+    if(f==="disponible") return x.status==="disponible";
+    if(f==="vendido-normal") return x.status==="vendido" && x.tipo==="normal";
+    if(f==="vendido-costo") return x.status==="vendido" && x.tipo==="costo";
+    return true;
+  }
+
+  function render(){
+    const searchEl=document.getElementById("search");
+    const filterEl=document.getElementById("filter");
+    const groupEl=document.getElementById("group");
+    if(!searchEl || !filterEl || !groupEl) return;
+
+    const q=searchEl.value.toLowerCase().trim();
+    const f=filterEl.value;
+    const g=groupEl.value;
+
+    const counts={};
+    items.forEach(x=>{ const k=x.ref+"||"+x.montura; counts[k]=(counts[k]||0)+1; });
+    const seen={};
+
+    const filtered=items.map((x,i)=>({...x,_i:i})).filter(x =>
+      (!q || String(x.ref).toLowerCase().includes(q) || String(x.montura).toLowerCase().includes(q)) &&
+      matchesFilter(x, f) && (g==="todos" || x.group===g)
+    );
+
+    const tb=document.getElementById("tbody");
+    tb.innerHTML="";
+    filtered.forEach(x=>{
+      const k=x.ref+"||"+x.montura;
+      seen[k]=(seen[k]||0)+1;
+      const total=counts[k];
+      const unitLabel = total>1 ? `<div class="unit-tag">unidad ${seen[k]} de ${total}</div>` : "";
+      const venta = x.venta!==null && x.venta!==undefined ? x.venta : ventaAuto(x.costo);
+      const tr=document.createElement("tr");
+      tr.className=rowClass(x);
+      const tag=tagInfo(x);
+      let actionBtns="";
+      if(x.status==="disponible"){
+        actionBtns = `<button class="mini red" onclick="sellItem(${x._i},'normal')">Vender</button>
+                      <button class="mini yellow" onclick="sellItem(${x._i},'costo')">A costo</button>`;
+      } else {
+        actionBtns = `<button class="mini green" onclick="restoreItem(${x._i})">Reactivar</button>`;
+      }
+      tr.innerHTML=`
+        <td class="ref">${esc(x.ref)}</td>
+        <td>${esc(x.montura)}${unitLabel}</td>
+        <td>${esc(x.group)}</td>
+        <td class="money">${money(x.costo)}</td>
+        <td class="money">${money(venta)}</td>
+        <td><span class="tag ${tag.cls}">${tag.label}</span></td>
+        <td><div class="actions">${actionBtns}<button class="mini" onclick="editItem(${x._i})">Editar</button><button class="mini danger" onclick="deleteItem(${x._i})">Eliminar</button></div></td>`;
+      tb.appendChild(tr);
+    });
+
+    document.getElementById("empty").style.display=filtered.length?"none":"block";
+
+    const refsSet=new Set(items.map(x=>x.ref+"||"+x.montura));
+    const avail=items.filter(x=>x.status==="disponible").length;
+    const soldNormal=items.filter(x=>x.status==="vendido" && x.tipo==="normal").length;
+    const soldCost=items.filter(x=>x.status==="vendido" && x.tipo==="costo").length;
+    document.getElementById("sRefs").textContent=refsSet.size;
+    document.getElementById("sUnits").textContent=items.length;
+    document.getElementById("sAvail").textContent=avail;
+    document.getElementById("sSold").textContent=soldNormal;
+    document.getElementById("sSoldCost").textContent=soldCost;
+  }
+
+  function toast(msg){
+    const t=document.getElementById("toast");
+    t.textContent=msg;
+    t.style.display="block";
+    setTimeout(()=>t.style.display="none",1800);
+  }
+
+  function updateVentaPreview(){
+    if(ventaManual) return;
+    document.getElementById("fVenta").value = ventaAuto(document.getElementById("fCosto").value);
+  }
+
+  function onVentaEdit(){
     ventaManual = true;
-    fVenta.value = x.venta;
     document.getElementById("fVentaTag").textContent = "(fijado manualmente)";
     document.getElementById("fResetWrap").style.display = "";
-  } else {
+  }
+
+  function resetVentaAuto(){
     ventaManual = false;
     document.getElementById("fVentaTag").textContent = "(automático)";
     document.getElementById("fResetWrap").style.display = "none";
     updateVentaPreview();
   }
-}
-function closeModal(){document.getElementById("modal").classList.remove("open");}
-function saveItem(){
-  const ref=fRef.value.trim(), montura=fMontura.value.trim();
-  const costo=Number(fCosto.value)||0;
-  const group=fGroup.value;
-  const venta = ventaManual ? (fVenta.value===""?null:Number(fVenta.value)) : null;
-  if(!ref||!montura){alert("Completa la referencia y la montura.");return}
 
-  if(editIndex===null){
-    const cantidad=Math.max(1,Number(fCantidad.value)||1);
-    for(let n=0;n<cantidad;n++){
-      items.push({ref, montura, costo, venta, group, status:"disponible", tipo:null});
+  function openModal(i=null){
+    editIndex=i;
+    document.getElementById("modal").classList.add("open");
+    document.getElementById("modalTitle").textContent=i===null?"Agregar montura":"Editar montura";
+    document.getElementById("fCantidadWrap").style.display = i===null ? "" : "none";
+    const x=i===null?{ref:"",montura:"",costo:"",group:"FOMENTO",venta:null}:items[i];
+    fRef.value=x.ref;
+    fMontura.value=x.montura;
+    fCantidad.value=1;
+    fCosto.value=x.costo??"";
+    fGroup.value=x.group||"FOMENTO";
+
+    if(x.venta!==null && x.venta!==undefined){
+      ventaManual = true;
+      fVenta.value = x.venta;
+      document.getElementById("fVentaTag").textContent = "(fijado manualmente)";
+      document.getElementById("fResetWrap").style.display = "";
+    } else {
+      ventaManual = false;
+      document.getElementById("fVentaTag").textContent = "(automático)";
+      document.getElementById("fResetWrap").style.display = "none";
+      updateVentaPreview();
     }
-    toast(cantidad>1 ? `${cantidad} unidades agregadas` : "Montura agregada correctamente");
-  } else {
-    const prev=items[editIndex];
-    items[editIndex]={...prev, ref, montura, costo, group, venta};
-    toast("Montura actualizada");
   }
-  save();render();closeModal();
-}
-function editItem(i){openModal(i)}
-function deleteItem(i){
-  if(!confirm("¿Eliminar esta unidad del inventario?"))return;
-  items.splice(i,1); save(); render(); toast("Unidad eliminada");
-}
-function sellItem(i, tipo){
-  const x=items[i];
-  if(x.status!=="disponible"){toast("Esta unidad ya no está disponible");return}
-  x.status="vendido";
-  x.tipo=tipo; // 'normal' o 'costo'
-  save();render();
-  toast(tipo==="costo" ? "Venta a costo registrada" : "Venta registrada");
-}
-function restoreItem(i){
-  const x=items[i];
-  if(x.status==="vendido"){ x.status="disponible"; x.tipo=null; save();render();toast("Unidad reactivada como disponible");}
-}
-function exportBackup(){
-  const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="respaldo_inventario_optica.json";a.click();
-  URL.revokeObjectURL(a.href);
-}
-function importBackup(ev){
-  const file=ev.target.files[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!Array.isArray(data))throw 0;items=data;save();render();toast("Respaldo importado");}catch(e){alert("El archivo no es un respaldo válido.");}};
-  reader.readAsText(file); ev.target.value="";
-}
-load(); render();
+
+  function closeModal(){document.getElementById("modal").classList.remove("open");}
+
+  async function saveItem(){
+    const ref=fRef.value.trim(), montura=fMontura.value.trim();
+    const costo=Number(fCosto.value)||0;
+    const group=fGroup.value;
+    const venta = ventaManual ? (fVenta.value===""?null:Number(fVenta.value)) : null;
+    if(!ref||!montura){alert("Completa la referencia y la montura.");return}
+
+    try{
+      if(editIndex===null){
+        const cantidad=Math.max(1,Number(fCantidad.value)||1);
+        const maxId=items.reduce((m,x)=>Math.max(m,Number(x.id)||0),0);
+        const batch=writeBatch(db);
+
+        for(let n=0;n<cantidad;n++){
+          const item={
+            id:maxId+n+1, ref, montura, costo, venta, group,
+            status:"disponible", tipo:null
+          };
+          batch.set(doc(db,INVENTORY_COLLECTION,String(item.id)),item);
+        }
+
+        await batch.commit();
+        toast(cantidad>1 ? `${cantidad} unidades agregadas` : "Montura agregada correctamente");
+      }else{
+        const prev=items[editIndex];
+        await saveItemToFirebase({...prev,ref,montura,costo,group,venta});
+        toast("Montura actualizada");
+      }
+      closeModal();
+    }catch(e){
+      console.error(e);
+      toast("No se pudo guardar en Firebase");
+    }
+  }
+
+  function editItem(i){openModal(i)}
+
+  async function deleteItem(i){
+    if(!confirm("¿Eliminar esta unidad del inventario?"))return;
+    try{
+      await deleteItemFromFirebase(items[i]);
+      toast("Unidad eliminada");
+    }catch(e){
+      console.error(e);
+      toast("No se pudo eliminar en Firebase");
+    }
+  }
+
+  async function sellItem(i,tipo){
+    const x=items[i];
+    if(x.status!=="disponible"){toast("Esta unidad ya no está disponible");return}
+    try{
+      await saveItemToFirebase({...x,status:"vendido",tipo});
+      toast(tipo==="costo" ? "Venta a costo registrada" : "Venta registrada");
+    }catch(e){
+      console.error(e);
+      toast("No se pudo registrar la venta");
+    }
+  }
+
+  async function restoreItem(i){
+    const x=items[i];
+    if(x.status==="vendido"){
+      try{
+        await saveItemToFirebase({...x,status:"disponible",tipo:null});
+        toast("Unidad reactivada como disponible");
+      }catch(e){
+        console.error(e);
+        toast("No se pudo reactivar la unidad");
+      }
+    }
+  }
+
+  function exportBackup(){
+    const blob=new Blob([JSON.stringify(items,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="respaldo_inventario_optica.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  async function importBackup(ev){
+    const file=ev.target.files[0];
+    if(!file)return;
+
+    const reader=new FileReader();
+    reader.onload=async ()=>{
+      try{
+        const data=JSON.parse(reader.result);
+        if(!Array.isArray(data))throw 0;
+
+        const batch=writeBatch(db);
+        data.forEach((item,index)=>{
+          const clean={...item,id:Number(item.id)||index+1};
+          batch.set(doc(db,INVENTORY_COLLECTION,String(clean.id)),clean);
+        });
+        await batch.commit();
+
+        toast("Respaldo importado a Firebase");
+      }catch(e){
+        console.error(e);
+        alert("El archivo no es un respaldo válido o no pudo guardarse en Firebase.");
+      }
+    };
+    reader.readAsText(file);
+    ev.target.value="";
+  }
+
+  // Los onclick existentes del HTML siguen funcionando.
+  Object.assign(window,{
+    render,openModal,closeModal,saveItem,editItem,deleteItem,
+    sellItem,restoreItem,exportBackup,importBackup,
+    updateVentaPreview,onVentaEdit,resetVentaAuto
+  });
+
+  (async function start(){
+    try{
+      await initializeInventory();
+      subscribeInventory();
+    }catch(e){
+      console.error("Firebase:",e);
+      alert("No se pudo conectar con Firebase. Revisa Cloud Firestore y sus reglas de acceso.");
+
+      try{
+        const local=JSON.parse(localStorage.getItem(STORAGE));
+        setItems(Array.isArray(local)?local:structuredClone(initial));
+      }catch(err){
+        setItems(structuredClone(initial));
+      }
+    }
+  })();
 </script>
 </body>
 </html>
