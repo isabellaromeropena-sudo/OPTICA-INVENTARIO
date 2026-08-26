@@ -47,6 +47,14 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
 .dialog{width:min(680px,100%);background:#fff;border-radius:26px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.2)}
 .dialog h2{margin:0 0 20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:12px;color:#766f65;margin:0 0 6px}.field input,.field select{width:100%;height:48px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:15px}.field input[disabled]{background:#f7f4ee;color:#8d6823;font-weight:700}.full{grid-column:1/-1}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
 .hint{font-size:12.5px;color:#9b9183;margin-top:14px}
+.dialog.wide{width:min(880px,100%);max-height:90vh;overflow:auto}
+.sales-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.sales-card{background:#fbfaf7;border:1px solid var(--line);border-radius:16px;padding:16px}
+.sales-card small{display:block;color:#9b9183;text-transform:uppercase;letter-spacing:.8px;font-size:11px}
+.sales-card strong{display:block;font-size:20px;margin-top:6px}
+.sales-table{width:100%;border-collapse:collapse}
+.sales-table th{text-align:left;padding:10px 8px;font-size:11px;text-transform:uppercase;color:#9b9183;border-bottom:1px solid var(--line)}
+.sales-table td{padding:9px 8px;font-size:13.5px;border-bottom:1px solid #f0ede5}
 .toast{position:fixed;right:22px;bottom:22px;background:#292722;color:#fff;padding:13px 17px;border-radius:13px;display:none;z-index:20}
 @media(max-width:1100px){.cards{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
@@ -81,6 +89,7 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
       <option value="todos">Todos los proveedores</option><option>FOMENTO</option><option>MONTUGLASS</option><option>VISION DIGITAL</option><option>JORNADAS</option>
     </select>
     <button class="btn primary" onclick="openModal()">＋ Agregar montura</button>
+    <button class="btn secondary" onclick="openSalesModal()">📊 Ver ventas</button>
     <button class="btn secondary" onclick="exportBackup()">Exportar respaldo</button>
     <label class="btn secondary" style="display:flex;align-items:center;cursor:pointer">Importar
       <input type="file" accept=".json" onchange="importBackup(event)" style="display:none">
@@ -118,6 +127,23 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
   </div>
   <div class="hint">El precio de venta se calcula solo como costo + 19% de costo, multiplicado por 3, pero puedes escribir el valor que quieras (por ejemplo si a esa montura le subes un poco más). Si agregas cantidad mayor a 1, se crea una fila (unidad) independiente por cada montura física, para que vender una no afecte a las otras.</div>
   <div class="modal-actions"><button class="btn secondary" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="saveItem()">Guardar montura</button></div>
+ </div>
+</div>
+<div id="salesModal" class="modal" onclick="if(event.target===this)closeSalesModal()">
+ <div class="dialog wide">
+  <h2>Reporte de ventas</h2>
+  <div class="sales-cards">
+    <div class="sales-card"><small>Unidades vendidas</small><strong id="rpUnits">0</strong></div>
+    <div class="sales-card"><small>Valor vendido (normal)</small><strong id="rpNormal">$0</strong></div>
+    <div class="sales-card"><small>Valor vendido (a costo)</small><strong id="rpCosto">$0</strong></div>
+  </div>
+  <div class="sales-card" style="margin-bottom:18px"><small>Valor total vendido</small><strong id="rpTotal" style="font-size:26px;color:#8d6823">$0</strong></div>
+  <table class="sales-table">
+    <thead><tr><th>Referencia</th><th>Montura</th><th>Proveedor</th><th>Tipo</th><th>Valor</th></tr></thead>
+    <tbody id="rpBody"></tbody>
+  </table>
+  <div id="rpEmpty" class="empty" style="display:none">Todavía no hay ventas registradas.</div>
+  <div class="modal-actions"><button class="btn secondary" onclick="closeSalesModal()">Cerrar</button></div>
  </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -482,11 +508,47 @@ tbody tr.row-red{background:#fff1f1}tbody tr.row-yellow{background:#fffaeb}tbody
     ev.target.value="";
   }
 
+  // ---- Reporte de ventas ----
+  function openSalesModal(){
+    const vendidas = items.filter(x=>x.status==="vendido");
+    const normales = vendidas.filter(x=>x.tipo==="normal");
+    const costos = vendidas.filter(x=>x.tipo==="costo");
+
+    const valorDe = x => x.venta!==null && x.venta!==undefined ? Number(x.venta) : ventaAuto(x.costo);
+
+    const totalNormal = normales.reduce((s,x)=>s+valorDe(x),0);
+    const totalCosto = costos.reduce((s,x)=>s+valorDe(x),0);
+
+    document.getElementById("rpUnits").textContent = vendidas.length;
+    document.getElementById("rpNormal").textContent = money(totalNormal);
+    document.getElementById("rpCosto").textContent = money(totalCosto);
+    document.getElementById("rpTotal").textContent = money(totalNormal+totalCosto);
+
+    const tb=document.getElementById("rpBody");
+    tb.innerHTML="";
+    vendidas.forEach(x=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td class="ref">${esc(x.ref)}</td>
+        <td>${esc(x.montura)}</td>
+        <td>${esc(x.group)}</td>
+        <td>${x.tipo==="costo"?"A costo":"Normal"}</td>
+        <td class="money">${money(valorDe(x))}</td>`;
+      tb.appendChild(tr);
+    });
+
+    document.getElementById("rpEmpty").style.display = vendidas.length ? "none" : "block";
+    document.getElementById("salesModal").classList.add("open");
+  }
+
+  function closeSalesModal(){document.getElementById("salesModal").classList.remove("open");}
+
   // Los onclick existentes del HTML siguen funcionando.
   Object.assign(window,{
     render,openModal,closeModal,saveItem,editItem,deleteItem,
     sellItem,restoreItem,toggleConfirm,exportBackup,importBackup,
-    updateVentaPreview,onVentaEdit,resetVentaAuto
+    updateVentaPreview,onVentaEdit,resetVentaAuto,
+    openSalesModal,closeSalesModal
   });
 
   (async function start(){
