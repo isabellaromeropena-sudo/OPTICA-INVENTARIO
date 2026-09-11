@@ -242,6 +242,11 @@ function sfb(k,v){
   S.form[k]=v;
   updateComputed();
 }
+// Estado único de laboratorio en el formulario (pendiente | lab | entregado)
+function setFormEstadoLab(v){
+  S.form.enviadoLab=(v==='lab');
+  S.form.entregado=(v==='entregado');
+}
 
 function updateComputed(){
   const f=S.form;
@@ -399,6 +404,19 @@ async function doToggleField(id,field){
   const p=S.records.find(r=>r.id===id);
   if(!p)return;
   const upd={...p,[field]:!p[field]};
+  try{
+    await ventasCol.doc(id).set(upd);
+    S.detail=upd;render();
+  }catch(e){
+    showToast('❌ No se pudo actualizar.');
+  }
+}
+
+// Estado único de laboratorio: pendiente | lab | entregado (mutuamente excluyentes)
+async function doSetLabStatus(id,status){
+  const p=S.records.find(r=>r.id===id);
+  if(!p)return;
+  const upd={...p,enviadoLab:status==='lab',entregado:status==='entregado'};
   try{
     await ventasCol.doc(id).set(upd);
     S.detail=upd;render();
@@ -604,15 +622,12 @@ function vForm(){
   </select></div>
   <div class="f"><label>N° Orden laboratorio</label><input id="fi-ordenLab" value="${esc(f.ordenLab)}" onchange="sf('ordenLab',this.value)" placeholder="ORD-001"/></div>
 </div>
-<div class="fr">
-  <div class="f" style="flex-direction:row;align-items:center;gap:8px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r2);padding:13px 14px">
-    <input id="fi-enviadoLab" type="checkbox" style="width:18px;height:18px;flex-shrink:0;accent-color:var(--blue)" ${f.enviadoLab?'checked':''} onchange="sfb('enviadoLab',this.checked)"/>
-    <label style="font-size:12.5px;color:var(--white);font-weight:600;margin:0">📦 Enviado a lab</label>
-  </div>
-  <div class="f" style="flex-direction:row;align-items:center;gap:8px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r2);padding:13px 14px">
-    <input id="fi-entregado" type="checkbox" style="width:18px;height:18px;flex-shrink:0;accent-color:var(--green)" ${f.entregado?'checked':''} onchange="sfb('entregado',this.checked)"/>
-    <label style="font-size:12.5px;color:var(--white);font-weight:600;margin:0">✅ Entregado</label>
-  </div>
+<div class="f"><label>Estado del pedido</label>
+  <select id="fi-estadoLab" onchange="setFormEstadoLab(this.value)">
+    <option value="pendiente" ${!f.enviadoLab&&!f.entregado?'selected':''}>⏳ Pendiente de enviar</option>
+    <option value="lab" ${f.enviadoLab&&!f.entregado?'selected':''}>📦 En laboratorio</option>
+    <option value="entregado" ${f.entregado?'selected':''}>✅ Entregado al paciente</option>
+  </select>
 </div>
 <div class="f"><label>Tipo de lente</label><input id="fi-tipoLente" value="${esc(f.tipoLente)}" onchange="sf('tipoLente',this.value)" placeholder="Ej: Monofocal, Progresivo…"/></div>
 <div class="fr">
@@ -666,9 +681,10 @@ function vDetail(){
 ${isProsp?`<div style="background:var(--purple2);border:1px solid rgba(124,107,168,.3);border-radius:var(--r2);padding:10px 14px;font-size:12.5px;color:var(--purple);margin-bottom:12px">🔵 Este paciente cotizó pero aún no confirma la compra. Su valor no se cuenta en las ventas activas.</div>`:''}
 ${p.esCosto?`<div style="background:rgba(138,131,117,.15);border:1px solid var(--border2);border-radius:var(--r2);padding:10px 14px;font-size:12.5px;color:var(--gray3);margin-bottom:12px">💰 Esta venta se hizo a costo (familiar), sin utilidad para el negocio. Se cuenta en el total de ventas pero no en la utilidad.</div>`:''}
 ${p.jornada?`<div class="cb" style="background:var(--purple2);border-color:rgba(124,107,168,.3)"><span style="font-size:16px">🗓️</span><div><div class="cb-l" style="color:var(--purple)">Jornada</div><div class="cb-v" style="font-size:15px">${esc(p.jornada)}</div></div></div>`:''}
-<div style="display:flex;gap:8px;margin-bottom:12px">
-  <button onclick="doToggleField('${p.id}','enviadoLab')" style="flex:1;padding:11px 8px;border-radius:10px;border:1.5px solid ${p.enviadoLab?'var(--blue)':'var(--border2)'};background:${p.enviadoLab?'var(--blue3)':'var(--bg3)'};color:${p.enviadoLab?'var(--blue2)':'var(--gray2)'};font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer">📦 ${p.enviadoLab?'Enviado a lab':'Sin enviar a lab'}</button>
-  <button onclick="doToggleField('${p.id}','entregado')" style="flex:1;padding:11px 8px;border-radius:10px;border:1.5px solid ${p.entregado?'var(--green)':'var(--border2)'};background:${p.entregado?'var(--green2)':'var(--bg3)'};color:${p.entregado?'var(--green)':'var(--gray2)'};font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer">✅ ${p.entregado?'Entregado':'Sin entregar'}</button>
+<div style="display:flex;gap:6px;margin-bottom:12px">
+  <button onclick="doSetLabStatus('${p.id}','pendiente')" style="flex:1;padding:11px 4px;border-radius:10px;border:1.5px solid ${!p.enviadoLab&&!p.entregado?'var(--amber)':'var(--border2)'};background:${!p.enviadoLab&&!p.entregado?'var(--amber2)':'var(--bg3)'};color:${!p.enviadoLab&&!p.entregado?'var(--amber)':'var(--gray2)'};font-size:11.5px;font-weight:700;font-family:var(--font);cursor:pointer">⏳ Pendiente</button>
+  <button onclick="doSetLabStatus('${p.id}','lab')" style="flex:1;padding:11px 4px;border-radius:10px;border:1.5px solid ${p.enviadoLab&&!p.entregado?'var(--blue)':'var(--border2)'};background:${p.enviadoLab&&!p.entregado?'var(--blue3)':'var(--bg3)'};color:${p.enviadoLab&&!p.entregado?'var(--blue2)':'var(--gray2)'};font-size:11.5px;font-weight:700;font-family:var(--font);cursor:pointer">📦 En lab</button>
+  <button onclick="doSetLabStatus('${p.id}','entregado')" style="flex:1;padding:11px 4px;border-radius:10px;border:1.5px solid ${p.entregado?'var(--green)':'var(--border2)'};background:${p.entregado?'var(--green2)':'var(--bg3)'};color:${p.entregado?'var(--green)':'var(--gray2)'};font-size:11.5px;font-weight:700;font-family:var(--font);cursor:pointer">✅ Entregado</button>
 </div>
 <div class="cb">
   <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--blue2)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
@@ -857,8 +873,9 @@ function vDashJornadas(){
     const costo=grp.reduce((s,r)=>s+tcp(r),0);
     const util=grp.reduce((s,r)=>s+tup(r),0);
     const margen=tot>0?(util/tot)*100:0;
+    const pendientes=grp.filter(r=>!r.enviadoLab&&!r.entregado).length;
+    const enLab=grp.filter(r=>r.enviadoLab&&!r.entregado).length;
     const entregados=grp.filter(r=>r.entregado).length;
-    const enviados=grp.filter(r=>r.enviadoLab).length;
     const isOpen=S.jornadaOpen===name;
     const enc=encodeURIComponent(name);
     return`
@@ -877,14 +894,15 @@ function vDashJornadas(){
     <span>Costo total: <b style="color:var(--white)">${fmt(costo)}</b></span>
     <span>Margen: <b style="color:${util>=0?'var(--purple)':'var(--red)'}">${margen.toFixed(1)}%</b></span>
   </div>
-  <div style="padding:10px 16px;display:flex;gap:16px;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--gray2)">
-    <span>📦 En lab: <b style="color:var(--white)">${enviados}/${grp.length}</b></span>
-    <span>✅ Entregados: <b style="color:var(--white)">${entregados}/${grp.length}</b></span>
+  <div style="padding:10px 16px;display:flex;gap:14px;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--gray2)">
+    <span>⏳ Pendientes: <b style="color:var(--white)">${pendientes}</b></span>
+    <span>📦 En lab: <b style="color:var(--white)">${enLab}</b></span>
+    <span>✅ Entregados: <b style="color:var(--white)">${entregados}</b></span>
   </div>
   ${isOpen?[...grp].sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(r=>`
   <div class="pi" onclick="openDetail('${r.id}')">
     <div class="av${tcli(r)==='prospecto'?' av-p':''}">${r.nombre.charAt(0).toUpperCase()}</div>
-    <div class="pi-info"><div class="pi-n">${r.nombre}</div><div class="pi-s">${tsp(r)>0?fmt(tsp(r))+' pendiente':'Pagado'} · ${r.enviadoLab?'📦 En lab':'📦 Sin enviar'} · ${r.entregado?'✅ Entregado':'⏳ Sin entregar'}</div></div>
+    <div class="pi-info"><div class="pi-n">${r.nombre}</div><div class="pi-s">${tsp(r)>0?fmt(tsp(r))+' pendiente':'Pagado'} · ${r.entregado?'✅ Entregado':r.enviadoLab?'📦 En laboratorio':'⏳ Pendiente de enviar'}</div></div>
     <div class="pi-r"><div class="pi-amt">${fmt(tvp(r))}</div></div>
   </div>`).join(''):''}
 </div>`;
@@ -955,33 +973,27 @@ function vDashLabs(){
   const groups={};
   withLab.forEach(r=>{(groups[r.laboratorio]=groups[r.laboratorio]||[]).push(r);});
   const names=Object.keys(groups).sort((a,b)=>{
-    const pa=groups[a].filter(r=>!r.enviadoLab).length,pb=groups[b].filter(r=>!r.enviadoLab).length;
+    const pa=groups[a].filter(r=>!(parseFloat(r.costoLente)>0)).length,pb=groups[b].filter(r=>!(parseFloat(r.costoLente)>0)).length;
     return pb-pa||a.localeCompare(b);
   });
   if(!names.length) return`<div class="empty"><span>🏢</span><p>Aún no has asignado un laboratorio a ningún paciente.<br>Selecciónalo al crear o editar el paciente.</p></div>`;
   return names.map(name=>{
     const grp=[...groups[name]].sort((a,b)=>b.fecha.localeCompare(a.fecha));
     const costoTot=grp.reduce((s,r)=>s+(parseFloat(r.costoLente)||0),0);
-    const enviados=grp.filter(r=>r.enviadoLab).length;
-    const entregados=grp.filter(r=>r.entregado).length;
-    const faltantes=grp.filter(r=>!(parseFloat(r.costoLente)>0)||!(parseFloat(r.costoMontura)>0)).length;
+    const faltantes=grp.filter(r=>!(parseFloat(r.costoLente)>0)).length;
     return`
 <div class="card">
   <div class="ch"><span class="ch-t">🏢 ${esc(name)}</span><span class="topbar-badge" style="background:var(--blue3);color:var(--blue2)">${grp.length}</span></div>
   <div style="padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--gray2)">
     <span>Costo lentes: <b style="color:var(--white)">${fmt(costoTot)}</b></span>
-    <span>📦 Enviados: <b style="color:var(--white)">${enviados}/${grp.length}</b></span>
-    <span>✅ Entregados: <b style="color:var(--white)">${entregados}/${grp.length}</b></span>
-    ${faltantes?`<span>⚠️ Faltan costos: <b style="color:var(--red)">${faltantes}</b></span>`:''}
+    ${faltantes?`<span>⚠️ Falta costo de lente: <b style="color:var(--red)">${faltantes}</b></span>`:''}
   </div>
   ${grp.map(r=>{
     const faltaLente=!(parseFloat(r.costoLente)>0);
-    const faltaMontura=!(parseFloat(r.costoMontura)>0);
     return`
   <div class="pi" onclick="openDetail('${r.id}')">
     <div class="av${tcli(r)==='prospecto'?' av-p':''}">${r.nombre.charAt(0).toUpperCase()}</div>
-    <div class="pi-info"><div class="pi-n">${r.nombre}</div><div class="pi-s">Ctrl ${r.control||'—'} · Lente: ${faltaLente?'<b style="color:var(--red)">falta</b>':fmt(r.costoLente)} · Montura: ${faltaMontura?'<b style="color:var(--red)">falta</b>':fmt(r.costoMontura)}</div></div>
-    <div class="pi-r"><span class="bdg ${r.enviadoLab?'paid':'pending'}">${r.enviadoLab?'📦 Enviado':'⏳ Sin enviar'}</span></div>
+    <div class="pi-info"><div class="pi-n">${r.nombre}</div><div class="pi-s">Ctrl ${r.control||'—'} · Lente: ${faltaLente?'<b style="color:var(--red)">falta</b>':fmt(r.costoLente)} · Montura: ${fmt(r.costoMontura)}</div></div>
   </div>`;}).join('')}
 </div>`;
   }).join('');
@@ -1085,10 +1097,10 @@ function doImport(){
   inp.click();
 }
 
-window.sf=sf;window.sfx=sfx;window.sfn=sfn;window.sfb=sfb;window.go=go;
+window.sf=sf;window.sfx=sfx;window.sfn=sfn;window.sfb=sfb;window.go=go;window.setFormEstadoLab=setFormEstadoLab;
 window.doSave=doSave;window.doDel=doDel;window.doAbono=doAbono;window.delAbono=delAbono;
 window.openDetail=openDetail;window.openNew=openNew;window.openEdit=openEdit;
-window.filterList=filterList;window.setFilter=setFilter;window.setClientType=setClientType;window.doConvert=doConvert;window.doToggleField=doToggleField;window.S=S;
+window.filterList=filterList;window.setFilter=setFilter;window.setClientType=setClientType;window.doConvert=doConvert;window.doToggleField=doToggleField;window.doSetLabStatus=doSetLabStatus;window.S=S;
 window.doExport=doExport;window.doImport=doImport;
 window.setDashTab=setDashTab;window.setDashMonth=setDashMonth;window.shiftMonth=shiftMonth;
 window.doAddGasto=doAddGasto;window.delGasto=delGasto;window.toggleJornada=toggleJornada;
